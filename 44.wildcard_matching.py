@@ -1,4 +1,22 @@
 class Solution:
+	def isMatch(self, s, p):
+		""" Dynamic programming with bottom-up approach
+		O(MN) time complexity and O(MN) space complexity
+		"""
+		M = len(s)
+		N = len(p)
+		dp = [[False] * (N+1) for _ in range(M+1)]
+		dp[-1][-1] = True
+
+		for i in range(M, -1, -1):
+			for j in range(N-1, -1, -1):
+				first_match = i < M and p[j] in {s[i], '?', '*'}
+				if p[j] == '*':
+					dp[i][j] = dp[i][j+1] or (first_match and dp[i+1][j])
+				else:
+					dp[i][j] = first_match and dp[i+1][j+1]
+		return dp[0][0]
+
 	def isMatch_2(self, s, p):
 		""" Dynamic programming with memo"""
 		# memo[i,j] is match of (s[:i], p[j:])
